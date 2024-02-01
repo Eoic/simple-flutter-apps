@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LandingScreen extends StatelessWidget {
-  final void Function() startQuiz;
+  final void Function() onStartQuiz;
 
-  const LandingScreen(this.startQuiz, {super.key});
+  const LandingScreen(this.onStartQuiz, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class LandingScreen extends StatelessWidget {
             ),
             Text(
               'Learn Flutter the fun way!',
-              style: TextStyle(
+              style: GoogleFonts.robotoFlex(
                 fontSize: 20,
                 color: Colors.purple.shade100,
               ),
@@ -31,7 +32,7 @@ class LandingScreen extends StatelessWidget {
               height: 16,
             ),
             OutlinedButton.icon(
-              onPressed: () => startQuiz(),
+              onPressed: onStartQuiz,
               label: const Text('Start a quiz!'),
               icon: const Icon(Icons.arrow_right_rounded),
             ),
