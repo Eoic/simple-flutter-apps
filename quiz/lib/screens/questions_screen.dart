@@ -51,7 +51,7 @@ class _QuestionsScreen extends State<QuestionsScreen> {
                 height: 16,
               ),
               ...questions[currentQuestionIndex]
-                  .getShuffledAnswers()
+                  .shuffledAnswers
                   .map((answer) => AnswerButton(text: answer.text, onTap: () => answerQuestion(answer)))
                   .toList(),
             ],

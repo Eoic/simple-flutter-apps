@@ -14,17 +14,16 @@ class AnswersSummary extends StatelessWidget {
         child: Column(
           children: answersSummary.map((AnswerSummary summary) {
             return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  width: 24,
-                  height: 24,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: summary.isCorrect ? Colors.blueAccent.shade400 : Colors.purpleAccent.shade400,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Center(child: Text(summary.order.toString(),),),
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    color: summary.isCorrect ? Colors.blueAccent.shade400 : Colors.purpleAccent.shade400,
+                    borderRadius: BorderRadius.circular(100),
                   ),
+                  child: Center(child: Text(summary.order.toString(),),),
                 ),
                 const SizedBox(width: 16, ),
                 Expanded(
@@ -35,6 +34,7 @@ class AnswersSummary extends StatelessWidget {
                       Text(summary.question, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
                       Text(summary.chosenAnswer, style: const TextStyle(color: Color.fromARGB(195, 255, 180, 255)),),
                       Text(summary.correctAnswer, style: TextStyle(color: Colors.lightBlueAccent.shade100),),
+                      const SizedBox(height: 8,)
                     ],
                   ),
                 ),

@@ -8,27 +8,26 @@ import 'package:quiz/data/questions.dart';
 class ResultsScreen extends StatelessWidget {
   final List<Answer> answers;
   final void Function() restartQuiz;
-
-  const ResultsScreen(this.answers, this.restartQuiz, {super.key});
-
-  (List<AnswerSummary>, int, int) getSummary() {
+  (List<AnswerSummary>, int, int) get summary {
     final List<AnswerSummary> summary = [];
 
     for (var i = 0; i < answers.length; i++) {
       summary.add((
-        order: i + 1,
-        question: questions[i].text,
-        isCorrect: questions[i].correctAnswerId == answers[i].id,
-        chosenAnswer: answers[i].text,
-        correctAnswer: questions[i]
-            .answers
-            .firstWhere((element) => element.id == questions[i].correctAnswerId)
-            .text
+      order: i + 1,
+      question: questions[i].text,
+      isCorrect: questions[i].correctAnswerId == answers[i].id,
+      chosenAnswer: answers[i].text,
+      correctAnswer: questions[i]
+          .answers
+          .firstWhere((element) => element.id == questions[i].correctAnswerId)
+          .text
       ));
     }
 
     return (summary, summary.length, countCorrectAnswers(summary));
   }
+
+  const ResultsScreen(this.answers, this.restartQuiz, {super.key});
 
   int countCorrectAnswers(List<AnswerSummary> summary) {
     return summary.fold(0, (value, answer) => answer.isCorrect ? value + 1 : value);
@@ -36,7 +35,7 @@ class ResultsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (summary, totalAnswers, correctAnswers) = getSummary();
+    final (answersSummary, totalAnswers, correctAnswers) = summary;
 
     return SafeArea(
       child: Container(
@@ -56,7 +55,7 @@ class ResultsScreen extends StatelessWidget {
             const SizedBox(
               height: 16.0,
             ),
-            AnswersSummary(summary),
+            AnswersSummary(answersSummary),
             TextButton(
               onPressed: restartQuiz,
               child: const Row(
