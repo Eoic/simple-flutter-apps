@@ -7,7 +7,7 @@ final dateFormatter = DateFormat.yMMMMd();
 class NewExpense extends StatefulWidget {
   final void Function(Expense expense) handleExpenseAdd;
 
-  const NewExpense({ required this.handleExpenseAdd, super.key});
+  const NewExpense({required this.handleExpenseAdd, super.key});
 
   @override
   State<NewExpense> createState() {
@@ -106,16 +106,31 @@ class _NewExpense extends State<NewExpense> {
                     setState(() => _selectedCategory = item);
                   },
                 ),
+              ],
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
                 ElevatedButton(
                   onPressed: _submitExpense,
                   child: const Text('Save'),
                 ),
-                TextButton(
+                const SizedBox(
+                  width: 16,
+                ),
+                ElevatedButton(
                   onPressed: () => Navigator.pop(context),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Theme.of(context).buttonTheme.colorScheme?.onPrimaryContainer,
+                    backgroundColor: Theme.of(context).buttonTheme.colorScheme?.errorContainer,
+                  ),
                   child: const Text('Cancel'),
-                )
+                ),
               ],
-            ),
+            )
           ],
         ),
       ),
@@ -125,25 +140,30 @@ class _NewExpense extends State<NewExpense> {
   void _submitExpense() {
     final amount = double.tryParse(_amountController.text);
     final isTitleInvalid = _titleController.text.trim().isEmpty;
-    final isAmountInvalid = amount == null || amount.isInfinite || amount.isNegative;
+    final isAmountInvalid =
+        amount == null || amount.isInfinite || amount.isNegative;
     final isDateInvalid = _selectedDate == null;
 
     if (isTitleInvalid || isAmountInvalid || isDateInvalid) {
       showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              icon: const Icon(Icons.error, color: Colors.red,),
-              title: const Text('Invalid input'),
-              content: const Text('Please make sure title, amount and date values are correct.'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Understood'),
-                )
-              ],
-            );
-          },
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            icon: const Icon(
+              Icons.error,
+              color: Colors.red,
+            ),
+            title: const Text('Invalid input'),
+            content: const Text(
+                'Please make sure title, amount and date values are correct.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Understood'),
+              )
+            ],
+          );
+        },
       );
 
       return;
