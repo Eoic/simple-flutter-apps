@@ -3,19 +3,29 @@ import 'package:meals/data/mock_data.dart';
 import 'package:meals/screens/meals.dart';
 import 'package:meals/widgets/category_grid_item.dart';
 import '../models/category.dart';
+import '../models/meal.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  const CategoriesScreen({super.key});
+  final List<Meal> availableMeals;
+  final void Function(Meal meal) onToggleFavourite;
+
+  const CategoriesScreen({
+    super.key,
+    required this.availableMeals,
+    required this.onToggleFavourite,
+  });
 
   void _selectCategory(BuildContext context, Category category) {
-    final categoryMeals =
-        meals.where((meal) => meal.categories.contains(category.id)).toList();
+    final categoryMeals = availableMeals
+      .where((meal) => meal.categories.contains(category.id))
+      .toList();
 
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => MealsScreen(
           title: category.title,
           meals: categoryMeals,
+          onToggleFavourite: onToggleFavourite,
         ),
       ),
     );
