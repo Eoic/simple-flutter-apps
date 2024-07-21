@@ -1,99 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:meals/screens/tabs.dart';
 import 'package:meals/widgets/filter_switch.dart';
+import 'package:meals/providers/filters.provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum Filter {
-  glutenFree,
-  lactoseFree,
-  vegetarian,
-  vegan
-}
-
-class FiltersScreen extends StatefulWidget {
-  final Map<Filter, bool> currentFilters;
-
-  const FiltersScreen({
-    super.key,
-    required this.currentFilters,
-  });
+class FiltersScreen extends ConsumerWidget {
+  const FiltersScreen({ super.key });
 
   @override
-  State<FiltersScreen> createState() => _FiltersScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final filters = ref.watch(filtersProvider);
 
-class _FiltersScreenState extends State<FiltersScreen> {
-  var _glutenFreeFilterSet = false;
-  var _lactoseFreeFilterSet = false;
-  var _vegetarianFilterSet = false;
-  var _veganFilterSet = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _glutenFreeFilterSet = widget.currentFilters[Filter.glutenFree]!;
-    _lactoseFreeFilterSet = widget.currentFilters[Filter.lactoseFree]!;
-    _vegetarianFilterSet = widget.currentFilters[Filter.vegetarian]!;
-    _veganFilterSet = widget.currentFilters[Filter.vegan]!;
-  }
-
-  _selectScreen(String screenId) {
-    Navigator.of(context).pop();
-
-    if (screenId == 'meals') {
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const TabsScreen()));
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Filters'),
       ),
-      body: PopScope(
-        canPop: false,
-        onPopInvoked: (bool didPop) {
-          if (didPop) {
-            return;
-          }
-
-          Navigator.of(context).pop({
-            Filter.glutenFree: _glutenFreeFilterSet,
-            Filter.lactoseFree: _lactoseFreeFilterSet,
-            Filter.vegetarian: _vegetarianFilterSet,
-            Filter.vegan: _veganFilterSet,
-          });
-        },
-        child: Column(
+      body:
+        Column(
           children: [
             FilterSwitch(
               title: 'Gluten-free',
               description: 'Only include gluten-free meals.',
-              isToggled: _glutenFreeFilterSet,
-              onToggle: (isChecked) => setState(() => _glutenFreeFilterSet = isChecked),
+              isToggled: filters[Filter.glutenFree]!,
+              onToggle: (isChecked) => ref.read(filtersProvider.notifier).setFilter(Filter.glutenFree, isChecked),
             ),
             FilterSwitch(
               title: 'Lactose-free',
               description: 'Only include lactose-free meals.',
-              isToggled: _lactoseFreeFilterSet,
-              onToggle: (isChecked) => setState(() => _lactoseFreeFilterSet = isChecked),
+              isToggled: filters[Filter.lactoseFree]!,
+              onToggle: (isChecked) => ref.read(filtersProvider.notifier).setFilter(Filter.lactoseFree, isChecked),
             ),
             FilterSwitch(
               title: 'Vegetarian',
               description: 'Only include vegetarian meals.',
-              isToggled: _vegetarianFilterSet,
-              onToggle: (isChecked) => setState(() => _vegetarianFilterSet = isChecked),
+              isToggled: filters[Filter.vegetarian]!,
+              onToggle: (isChecked) => ref.read(filtersProvider.notifier).setFilter(Filter.vegetarian, isChecked),
             ),
             FilterSwitch(
               title: 'Vegan',
               description: 'Only include vegan meals.',
-              isToggled: _veganFilterSet,
-              onToggle: (isChecked) => setState(() => _veganFilterSet = isChecked),
+              isToggled: filters[Filter.vegan]!,
+              onToggle: (isChecked) => ref.read(filtersProvider.notifier).setFilter(Filter.vegan, isChecked),
             ),
           ],
         ),
-      ),
-    );
+      );
   }
 }
